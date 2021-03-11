@@ -34,7 +34,7 @@ pipeline {
             when {
                 buildingTag()
             }
-            stages {
+            parallel {
                 stage('Artifactory (Release)') {
                     steps {
                         echo "Publishing release"
