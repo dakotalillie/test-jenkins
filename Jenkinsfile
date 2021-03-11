@@ -1,34 +1,56 @@
 pipeline {
     agent any
     stages {
-        stage('test') {
+        stage('Install') {
             steps {
-                sh 'printenv'
+                echo "Installing"
             }
         }
-        stage('is-main') {
-            when {
-                branch 'main'
-            }
-            steps {
-                echo "I'm main!"
+        stage('Static tests') {
+            parallel {
+                stage('Validate') {
+                    steps {
+                        echo "Validating"
+                    }
+                }
+                stage('Format') {
+                    steps {
+                        echo "Formatting"
+                    }
+                }
+                stage('Lint') {
+                    steps {
+                        echo "Linting"
+                    }
+                }
             }
         }
-        stage('is-pr') {
-            when {
-                changeRequest()
-            }
+        stage('Unit tests') {
             steps {
-                echo "I'm a PR!"
+                echo "Unit testing"
             }
         }
-        stage('is-tag') {
+        stage('Publish') {
             when {
                 buildingTag()
             }
-            steps {
-                echo "I'm a tag!"
+            stages {
+                stage('Artifactory (Release)') {
+                    steps {
+                        echo "Publishing release"
+                    }
+                }
+                stage('Artifactory (Latest)') {
+                    steps {
+                        echo "Publishing latest"
+                    }
+                }
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()
         }
     }
 }
