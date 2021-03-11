@@ -4,7 +4,14 @@ pipeline {
         stage('test') {
             steps {
                 sh 'printenv'
-                echo 'hello!'
+            }
+        }
+        stage('is-pr') {
+            when {
+                branch 'PR-*'
+            }
+            steps {
+                echo "I'm a PR!"
             }
         }
     }
