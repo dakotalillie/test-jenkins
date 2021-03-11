@@ -6,7 +6,7 @@ pipeline {
                 echo "Installing"
             }
         }
-        stage('Static tests') {
+        stage('Test (Static)') {
             parallel {
                 stage('Validate') {
                     steps {
@@ -25,7 +25,7 @@ pipeline {
                 }
             }
         }
-        stage('Unit tests') {
+        stage('Test (Unit)') {
             steps {
                 echo "Unit testing"
             }
